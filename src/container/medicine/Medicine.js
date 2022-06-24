@@ -20,8 +20,9 @@ function Medicine(props) {
     const handleClose = () => {
         setOpen(false);
     };
-const Datainti = (values) => {
 
+const Datainti = (values) => {
+// mangavvani
     const databack = JSON.parse(localStorage.getItem('medicine' ));
 
     if(databack === null){
