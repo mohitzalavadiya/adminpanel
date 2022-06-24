@@ -22,7 +22,7 @@ function Medicine(props) {
     };
 
 const Datainti = (values) => {
-// mangavvani
+
     const databack = JSON.parse(localStorage.getItem('medicine' ));
 
     if(databack === null){
