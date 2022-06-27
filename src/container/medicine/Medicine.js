@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -8,10 +8,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as yup from 'yup';
 import { useFormik, Form, Formik } from 'formik';
+import { DataGrid } from '@mui/x-data-grid';
 
 function Medicine(props) {
 
     const [open, setOpen] = React.useState(false);
+    const [data, setData] = useState([])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -25,26 +27,45 @@ const Datainti = (values) => {
 
     const databack = JSON.parse(localStorage.getItem('medicine' ));
 
+    let id = Math.floor(Math.random()*1000);
+
+   const datain = {
+    id : id,
+    ...values
+   }
+
     if(databack === null){
-        localStorage.setItem('medicine', JSON.stringify([values]))
+        localStorage.setItem('medicine', JSON.stringify([datain]))
     }else{
-        databack.push(values)
+        databack.push(datain)
         localStorage.setItem('medicine', JSON.stringify(databack))
     }
 
 }
 
+    const localdata = () => {
+        const datap = JSON.parse(localStorage.getItem("medicine"));
+        if(datap === null){
+            return
+        }
+        setData(datap);
+    }
+
+    useEffect( () => {
+        localdata()
+    },[]);
+
     let schema = yup.object().shape({
         name: yup.string().required("required"),
-        email: yup.string().email().required("required"),
-        quantity: yup.string().required("required"),
-        expiry: yup.string().required("required"),
+        price: yup.number().required("required"),
+        quantity: yup.number().required("required"),
+        expiry: yup.number().required("required"),
     });
 
     const formikobj = useFormik({
         initialValues: {
             name: '',
-            email: '',
+            price: '',
             quantity: '',
             expiry: ''
         },
@@ -53,9 +74,19 @@ const Datainti = (values) => {
             Datainti(values);
             action.resetForm()
             handleClose()
+            localdata()
         },
     });
 
+    const columns = [
+        { field: 'name', headerName: 'Name', width: 170 },
+        { field: 'price', headerName: 'Price', width: 170 },
+        { field: 'quantity', headerName: 'Quantity', width: 170 },
+        { field: 'expiry', headerName: 'Expiry', width: 170 }
+        
+      ];
+      
+      
     const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikobj;
 
     return (
@@ -66,6 +97,16 @@ const Datainti = (values) => {
                 <Button variant="outlined" onClick={handleClickOpen}>
                     Add Medicine
                 </Button>
+                <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        checkboxSelection
+      />
+    </div>
+
                 <Dialog fullWidth open={open} onClose={handleClose}>
                     <DialogTitle>Add Medicine</DialogTitle>
                     <Formik values={formikobj}>
@@ -85,16 +126,16 @@ const Datainti = (values) => {
                                 {errors.name && touched.name ? <p>{errors.name}</p> : ''}
                                 <TextField
                                     margin="dense"
-                                    name="email"
-                                    label="Email Address"
-                                    type="email"
+                                    name="price"
+                                    label="Price"
+                                    type="text"
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.email}
                                 />
-                                {errors.email && touched.email ? <p>{errors.email}</p> : ''}
+                                {errors.price && touched.price ? <p>{errors.price}</p> : ''}
                                 <TextField
                                     margin="dense"
                                     name="quantity"
