@@ -9,6 +9,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import * as yup from 'yup';
 import { useFormik, Form, Formik } from 'formik';
 import { DataGrid } from '@mui/x-data-grid';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 function Medicine(props) {
 
@@ -23,37 +26,36 @@ function Medicine(props) {
         setOpen(false);
     };
 
-const Datainti = (values) => {
+    const Datainti = (values) => {
 
-    const databack = JSON.parse(localStorage.getItem('medicine' ));
+        const databack = JSON.parse(localStorage.getItem('medicine'));
 
-    let id = Math.floor(Math.random()*1000);
+        let id = Math.floor(Math.random() * 1000);
 
-   const datain = {
-    id : id,
-    ...values
-   }
+        const datain = {
+            id: id,
+            ...values
+        }
 
-    if(databack === null){
-        localStorage.setItem('medicine', JSON.stringify([datain]))
-    }else{
-        databack.push(datain)
-        localStorage.setItem('medicine', JSON.stringify(databack))
+        if (databack === null) {
+            localStorage.setItem('medicine', JSON.stringify([datain]))
+        } else {
+            databack.push(datain)
+            localStorage.setItem('medicine', JSON.stringify(databack))
+        }
+
     }
-
-}
 
     const localdata = () => {
         const datap = JSON.parse(localStorage.getItem("medicine"));
-        if(datap === null){
-            return
+        if (datap !== null) {
+            setData(datap);
         }
-        setData(datap);
     }
 
-    useEffect( () => {
+    useEffect(() => {
         localdata()
-    },[]);
+    }, []);
 
     let schema = yup.object().shape({
         name: yup.string().required("required"),
@@ -77,16 +79,34 @@ const Datainti = (values) => {
             localdata()
         },
     });
+    const detelefun = (params) => {
+        const localdatadelete = JSON.parse(localStorage.getItem("medicine"))
+
+       const deletedata = localdatadelete.filter((p) => p.id !== params.id)
+    
+       setData(deletedata);
+
+       localStorage.setItem("medicine", JSON.stringify(deletedata))
+    }
 
     const columns = [
         { field: 'name', headerName: 'Name', width: 170 },
         { field: 'price', headerName: 'Price', width: 170 },
         { field: 'quantity', headerName: 'Quantity', width: 170 },
-        { field: 'expiry', headerName: 'Expiry', width: 170 }
-        
-      ];
-      
-      
+        { field: 'expiry', headerName: 'Expiry', width: 170 },
+        {
+            field: 'action',
+            headerName: 'Action',
+            width: 170,
+            renderCell: (params) => (
+                <IconButton aria-label="delete" onClick={() => detelefun(params)}>
+                <DeleteIcon />
+            </IconButton>
+            ) 
+        }
+    ];
+
+
     const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikobj;
 
     return (
@@ -98,14 +118,14 @@ const Datainti = (values) => {
                     Add Medicine
                 </Button>
                 <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={data}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
-    </div>
+                    <DataGrid
+                        rows={data}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                    />
+                </div>
 
                 <Dialog fullWidth open={open} onClose={handleClose}>
                     <DialogTitle>Add Medicine</DialogTitle>

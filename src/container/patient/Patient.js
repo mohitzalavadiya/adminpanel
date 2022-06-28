@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,11 +7,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as yup from 'yup';
-import { Form, Formik, useFormik } from 'formik';
+import { Form, Formik, insert, useFormik } from 'formik';
+import { DataGrid } from '@mui/x-data-grid';
 
 function Patient(props) {
 
     const [open, setOpen] = React.useState(false);
+    const [data, setData] = useState([])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -20,6 +22,17 @@ function Patient(props) {
     const handleClose = () => {
         setOpen(false);
     };
+    const insertdata = (values) => {
+        const localdata = JSON.parse(localStorage.getItem("patient"))
+
+        if(localdata === null){
+            localStorage.setItem("patient", JSON.stringify([values]))
+        }
+        else{
+            localdata.push(values)
+            localStorage.setItem("patient", JSON.stringify(localdata))
+        }
+    }
 
     let schema = yup.object().shape({
         name: yup.string().required("required"),
@@ -36,29 +49,45 @@ function Patient(props) {
             address: ''
         },
         validationSchema: schema,
+
         onSubmit: (values, action) => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
             action.resetForm()
+            insertdata(values)
         },
     });
 
     const {handleBlur, handleChange, handleSubmit, errors, touched, values} = formikobj;
-
-
-
+    const columns = [
+        { field: 'name', headerName: 'Name', width: 170 },
+        { field: 'age', headerName: 'Age', width: 170 },
+        { field: 'date', headerName: 'Date', width: 170 },
+        { field: 'address', headerName: 'Address', width: 170 },
+        
+      ];
+      
 
     return (
         <div>
+            <p>Patient</p>
             <Button variant="outlined" onClick={handleClickOpen}>
                 Patient
             </Button>
+            <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        checkboxSelection
+      />
+    </div>
             <Dialog fullWidth open={open} onClose={handleClose}>
                 <DialogTitle>Patient</DialogTitle>
                 <Formik values={formikobj}>
                 <Form onSubmit={handleSubmit}>
                     <DialogContent>
                         <TextField
-                            autoFocus
                             margin="dense"
                             name="name"
                             label="Patient Name"
@@ -71,7 +100,6 @@ function Patient(props) {
                         />
                         <p>{errors.name && touched.name ? errors.name : ''}</p>
                         <TextField
-                            autoFocus
                             margin="dense"
                             name="age"
                             label="Patient Age"
@@ -84,7 +112,6 @@ function Patient(props) {
                         />
                         <p>{errors.age && touched.age ? errors.age : ''}</p>
                         <TextField
-                            autoFocus
                             margin="dense"
                             name="date"
                             label="Appointment Date"
@@ -97,7 +124,6 @@ function Patient(props) {
                         />
                         <p>{errors.date && touched.date ? errors.date : ''}</p>
                         <TextField
-                            autoFocus
                             margin="dense"
                             name="address"
                             label="Address"
