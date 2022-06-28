@@ -167,7 +167,6 @@ const Datainti = (values) => {
                                     <Button type='submit' >submit</Button>
                                 </DialogActions>
                             </DialogContent>
-
                         </Form>
                     </Formik>
                 </Dialog>
