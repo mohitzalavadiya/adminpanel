@@ -11,12 +11,19 @@ import { useFormik, Form, Formik } from 'formik';
 import { DataGrid } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 
 function Medicine(props) {
 
     const [open, setOpen] = React.useState(false);
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]);
+    const [alert, setAlert] = useState(false);
+    const [alertdata, setAlertdata] = useState(null);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -79,14 +86,24 @@ function Medicine(props) {
             localdata()
         },
     });
-    const detelefun = (params) => {
+    const detelefun = () => {
         const localdatadelete = JSON.parse(localStorage.getItem("medicine"))
 
-       const deletedata = localdatadelete.filter((p) => p.id !== params.id)
-    
-       setData(deletedata);
+        const deletedata = localdatadelete.filter((p) => p.id !== alertdata.id)
 
-       localStorage.setItem("medicine", JSON.stringify(deletedata))
+        setData(deletedata);
+
+        localStorage.setItem("medicine", JSON.stringify(deletedata))
+        setAlert(false)
+    }
+
+    const alertopen = (params) => {
+        setAlert(true);
+        setAlertdata(params);
+
+    }
+    const alertclose = () => {
+        setAlert(false)
     }
 
     const columns = [
@@ -99,10 +116,10 @@ function Medicine(props) {
             headerName: 'Action',
             width: 170,
             renderCell: (params) => (
-                <IconButton aria-label="delete" onClick={() => detelefun(params)}>
-                <DeleteIcon />
-            </IconButton>
-            ) 
+                <IconButton aria-label="delete" onClick={() => alertopen(params)}>
+                    <DeleteIcon />
+                </IconButton>
+            )
         }
     ];
 
@@ -190,6 +207,23 @@ function Medicine(props) {
                         </Form>
                     </Formik>
                 </Dialog>
+
+                <div>
+
+                    <Dialog
+                        open={alert}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={alertclose}
+                        aria-describedby="alert-dialog-slide-description"
+                    >
+                        <DialogTitle>{"Are You Sure?"}</DialogTitle>
+                        <DialogActions>
+                            <Button onClick={alertclose}>Disagree</Button>
+                            <Button onClick={detelefun}>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </div>
 
         </div>
