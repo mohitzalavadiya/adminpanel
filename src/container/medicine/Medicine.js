@@ -89,7 +89,7 @@ function Medicine(props) {
     const detelefun = () => {
         const localdatadelete = JSON.parse(localStorage.getItem("medicine"))
 
-        const deletedata = localdatadelete.filter((p) => p.id !== alertdata.id)
+        const deletedata = localdatadelete.filter((p) => p.id !== alertdata)
 
         setData(deletedata);
 
@@ -116,7 +116,7 @@ function Medicine(props) {
             headerName: 'Action',
             width: 170,
             renderCell: (params) => (
-                <IconButton aria-label="delete" onClick={() => alertopen(params)}>
+                <IconButton aria-label="delete" onClick={() => {alertopen(); setAlertdata(params.id)}}>
                     <DeleteIcon />
                 </IconButton>
             )
@@ -219,8 +219,8 @@ function Medicine(props) {
                     >
                         <DialogTitle>{"Are You Sure?"}</DialogTitle>
                         <DialogActions>
-                            <Button onClick={alertclose}>Disagree</Button>
-                            <Button onClick={detelefun}>Agree</Button>
+                            <Button onClick={alertclose}>No</Button>
+                            <Button onClick={detelefun}>Yes</Button>
                         </DialogActions>
                     </Dialog>
                 </div>
