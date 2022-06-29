@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -24,12 +24,17 @@ function Patient(props) {
     };
     const insertdata = (values) => {
         const localdata = JSON.parse(localStorage.getItem("patient"))
+        let id = Math.floor(Math.random()*1000);
 
+        let dataid = {
+            id: id,
+            ...values
+        }
         if(localdata === null){
-            localStorage.setItem("patient", JSON.stringify([values]))
+            localStorage.setItem("patient", JSON.stringify([dataid]))
         }
         else{
-            localdata.push(values)
+            localdata.push(dataid)
             localStorage.setItem("patient", JSON.stringify(localdata))
         }
     }
@@ -54,6 +59,7 @@ function Patient(props) {
             // alert(JSON.stringify(values, null, 2));
             action.resetForm()
             insertdata(values)
+            handleClose()
         },
     });
 
@@ -65,6 +71,17 @@ function Patient(props) {
         { field: 'address', headerName: 'Address', width: 170 },
         
       ];
+
+      const localdata = () => {
+        const datain = JSON.parse(localStorage.getItem("patient"))
+        if(datain !== null){
+             setData(datain)                         
+        }
+      }
+
+      useEffect(() => {
+        localdata()
+    }, []);
       
 
     return (

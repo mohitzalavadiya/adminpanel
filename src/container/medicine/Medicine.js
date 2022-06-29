@@ -12,6 +12,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Slide from '@mui/material/Slide';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -24,17 +25,20 @@ function Medicine(props) {
     const [data, setData] = useState([]);
     const [alert, setAlert] = useState(false);
     const [alertdata, setAlertdata] = useState(null);
+    const [dialog, setDialog] = useState(false)
 
+        // function for dialog open
     const handleClickOpen = () => {
         setOpen(true);
     };
-
+        // function for dialog close
     const handleClose = () => {
         setOpen(false);
+        formikobj.resetForm()
     };
-
+    
+// function for localStorage item
     const Datainti = (values) => {
-
         const databack = JSON.parse(localStorage.getItem('medicine'));
 
         let id = Math.floor(Math.random() * 1000);
@@ -43,7 +47,6 @@ function Medicine(props) {
             id: id,
             ...values
         }
-
         if (databack === null) {
             localStorage.setItem('medicine', JSON.stringify([datain]))
         } else {
@@ -53,17 +56,19 @@ function Medicine(props) {
 
     }
 
+    // function for saw the data of table
     const localdata = () => {
         const datap = JSON.parse(localStorage.getItem("medicine"));
         if (datap !== null) {
             setData(datap);
         }
     }
-
+    // useEffect
     useEffect(() => {
         localdata()
     }, []);
 
+    // yup schema
     let schema = yup.object().shape({
         name: yup.string().required("required"),
         price: yup.number().required("required"),
@@ -71,6 +76,7 @@ function Medicine(props) {
         expiry: yup.number().required("required"),
     });
 
+    // formikobj
     const formikobj = useFormik({
         initialValues: {
             name: '',
@@ -86,6 +92,8 @@ function Medicine(props) {
             localdata()
         },
     });
+
+    // function for deletedata
     const detelefun = () => {
         const localdatadelete = JSON.parse(localStorage.getItem("medicine"))
 
@@ -97,15 +105,25 @@ function Medicine(props) {
         setAlert(false)
     }
 
+    // function for alertopen
     const alertopen = (params) => {
         setAlert(true);
         setAlertdata(params);
 
     }
+
+    // function for alertclose
     const alertclose = () => {
         setAlert(false)
     }
 
+    // function for update
+    const editopen = (params) => {
+       setOpen(true)
+        formikobj.setValues(params.row)
+    }
+
+    // table data
     const columns = [
         { field: 'name', headerName: 'Name', width: 170 },
         { field: 'price', headerName: 'Price', width: 170 },
@@ -116,9 +134,15 @@ function Medicine(props) {
             headerName: 'Action',
             width: 170,
             renderCell: (params) => (
+                <>
+                <IconButton aria-label="edit" onClick={() => editopen(params)}>
+                    <EditIcon />
+                </IconButton>
                 <IconButton aria-label="delete" onClick={() => {alertopen(); setAlertdata(params.id)}}>
                     <DeleteIcon />
                 </IconButton>
+                </>
+                
             )
         }
     ];
@@ -170,7 +194,7 @@ function Medicine(props) {
                                     variant="standard"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.email}
+                                    value={values.price}
                                 />
                                 {errors.price && touched.price ? <p>{errors.price}</p> : ''}
                                 <TextField
