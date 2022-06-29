@@ -36,7 +36,7 @@ function Medicine(props) {
         setOpen(false);
         formikobj.resetForm()
     };
-    
+
 // function for localStorage item
     const Datainti = (values) => {
         const databack = JSON.parse(localStorage.getItem('medicine'));
@@ -108,8 +108,7 @@ function Medicine(props) {
     // function for alertopen
     const alertopen = (params) => {
         setAlert(true);
-        setAlertdata(params);
-
+        // setAlertdata(params);
     }
 
     // function for alertclose
