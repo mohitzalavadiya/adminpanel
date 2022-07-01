@@ -24,16 +24,16 @@ function Patient(props) {
     };
     const insertdata = (values) => {
         const localdata = JSON.parse(localStorage.getItem("patient"))
-        let id = Math.floor(Math.random()*1000);
+        let id = Math.floor(Math.random() * 1000);
 
         let dataid = {
             id: id,
             ...values
         }
-        if(localdata === null){
+        if (localdata === null) {
             localStorage.setItem("patient", JSON.stringify([dataid]))
         }
-        else{
+        else {
             localdata.push(dataid)
             localStorage.setItem("patient", JSON.stringify(localdata))
         }
@@ -57,32 +57,30 @@ function Patient(props) {
 
         onSubmit: (values, action) => {
             // alert(JSON.stringify(values, null, 2));
-            action.resetForm()
             insertdata(values)
+            localdata()
             handleClose()
         },
     });
 
-    const {handleBlur, handleChange, handleSubmit, errors, touched, values} = formikobj;
+    const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikobj;
     const columns = [
         { field: 'name', headerName: 'Name', width: 170 },
         { field: 'age', headerName: 'Age', width: 170 },
         { field: 'date', headerName: 'Date', width: 170 },
         { field: 'address', headerName: 'Address', width: 170 },
-        
-      ];
 
-      const localdata = () => {
+    ];
+
+    const localdata = () => {
         const datain = JSON.parse(localStorage.getItem("patient"))
-        if(datain !== null){
-             setData(datain)                         
+        if (datain !== null) {
+            setData(datain)
         }
-      }
-
-      useEffect(() => {
+    }
+    useEffect(() => {
         localdata()
     }, []);
-      
 
     return (
         <div>
@@ -91,73 +89,73 @@ function Patient(props) {
                 Patient
             </Button>
             <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={data}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
-    </div>
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    checkboxSelection
+                />
+            </div>
             <Dialog fullWidth open={open} onClose={handleClose}>
                 <DialogTitle>Patient</DialogTitle>
                 <Formik values={formikobj}>
-                <Form onSubmit={handleSubmit}>
-                    <DialogContent>
-                        <TextField
-                            margin="dense"
-                            name="name"
-                            label="Patient Name"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.name}
-                        />
-                        <p>{errors.name && touched.name ? errors.name : ''}</p>
-                        <TextField
-                            margin="dense"
-                            name="age"
-                            label="Patient Age"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.age}
-                        />
-                        <p>{errors.age && touched.age ? errors.age : ''}</p>
-                        <TextField
-                            margin="dense"
-                            name="date"
-                            label="Appointment Date"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.date}
-                        />
-                        <p>{errors.date && touched.date ? errors.date : ''}</p>
-                        <TextField
-                            margin="dense"
-                            name="address"
-                            label="Address"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.address}
-                        />
-                        <p>{errors.address && touched.address ? errors.address : ''}</p>
-                        <DialogActions>
-                            <Button onClick={handleClose}>Cancel</Button>
-                            <Button type='submit'>Submit</Button>
-                        </DialogActions>
-                    </DialogContent>
-                </Form>
+                    <Form onSubmit={handleSubmit}>
+                        <DialogContent>
+                            <TextField
+                                margin="dense"
+                                name="name"
+                                label="Patient Name"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.name}
+                            />
+                            <p>{errors.name && touched.name ? errors.name : ''}</p>
+                            <TextField
+                                margin="dense"
+                                name="age"
+                                label="Patient Age"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.age}
+                            />
+                            <p>{errors.age && touched.age ? errors.age : ''}</p>
+                            <TextField
+                                margin="dense"
+                                name="date"
+                                label="Appointment Date"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.date}
+                            />
+                            <p>{errors.date && touched.date ? errors.date : ''}</p>
+                            <TextField
+                                margin="dense"
+                                name="address"
+                                label="Address"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.address}
+                            />
+                            <p>{errors.address && touched.address ? errors.address : ''}</p>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button type='submit'>Submit</Button>
+                            </DialogActions>
+                        </DialogContent>
+                    </Form>
                 </Formik>
             </Dialog>
         </div>

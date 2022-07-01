@@ -25,7 +25,7 @@ function Medicine(props) {
     const [data, setData] = useState([]);
     const [alert, setAlert] = useState(false);
     const [alertdata, setAlertdata] = useState(null);
-    const [dialog, setDialog] = useState(false)
+    const [update, setUpdate] = useState(false)
 
         // function for dialog open
     const handleClickOpen = () => {
@@ -76,6 +76,22 @@ function Medicine(props) {
         expiry: yup.number().required("required"),
     });
 
+    const updatedata = (values) => {
+        const upddata = JSON.parse(localStorage.getItem("medicine"))
+
+       const newdata = upddata.map((m) => {
+            if(m.id === values.id){
+                return values;
+            }else{
+                return m;
+            }
+        })
+        localStorage.setItem("medicine", JSON.stringify(newdata))
+
+        handleClose()
+        localdata()
+        setUpdate(false)
+    }
     // formikobj
     const formikobj = useFormik({
         initialValues: {
@@ -86,8 +102,11 @@ function Medicine(props) {
         },
         validationSchema: schema,
         onSubmit: (values, action) => {
-            Datainti(values);
-            action.resetForm()
+            if(update){
+                updatedata(values)
+            }else{
+                Datainti(values);
+            } 
             handleClose()
             localdata()
         },
@@ -119,6 +138,8 @@ function Medicine(props) {
     // function for update
     const editopen = (params) => {
        setOpen(true)
+
+       setUpdate(true)
         formikobj.setValues(params.row)
     }
 
@@ -224,7 +245,12 @@ function Medicine(props) {
 
                                 <DialogActions>
                                     <Button onClick={handleClose}>Cancel</Button>
+                                    {
+                                        update ? 
+                                    <Button type='submit' >Update</Button>
+                                    :
                                     <Button type='submit' >submit</Button>
+                                    }
                                 </DialogActions>
                             </DialogContent>
                         </Form>
