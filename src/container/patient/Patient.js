@@ -7,13 +7,20 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as yup from 'yup';
-import { Form, Formik, insert, useFormik } from 'formik';
+import { Form, Formik, useFormik } from 'formik';
 import { DataGrid } from '@mui/x-data-grid';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Edit from '@mui/icons-material/Edit';
 
 function Patient(props) {
 
     const [open, setOpen] = React.useState(false);
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]);
+    const [alertopen, setAlertOpen] = React.useState(false);
+    const [deletedata, setdeletedata] =useState([]);
+    const [update, setUpdate] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,143 +29,248 @@ function Patient(props) {
     const handleClose = () => {
         setOpen(false);
     };
-    const insertdata = (values) => {
-        const localdata = JSON.parse(localStorage.getItem("patient"))
-        let id = Math.floor(Math.random() * 1000);
+   
+  const handleAlertOpen = () => {
+    setAlertOpen(true);
+  };
 
-        let dataid = {
-            id: id,
-            ...values
-        }
-        if (localdata === null) {
-            localStorage.setItem("patient", JSON.stringify([dataid]))
-        }
-        else {
-            localdata.push(dataid)
-            localStorage.setItem("patient", JSON.stringify(localdata))
-        }
-    }
+  const handlealertClose = () => {
+    setAlertOpen(false);
+  };
 
     let schema = yup.object().shape({
         name: yup.string().required("required"),
-        age: yup.number().required("required").positive().integer(),
-        date: yup.number().required("required"),
-        address: yup.string().required("required")
+        price: yup.number().required("required").positive().integer(),
+        quentity: yup.number().required("required"),
+        expiry: yup.number().required("required")
     });
 
-    const formikobj = useFormik({
+    const formik = useFormik({
         initialValues: {
             name: '',
-            age: '',
-            date: '',
-            address: ''
+            price: '',
+            quentity: '',
+            expiry: ''
         },
         validationSchema: schema,
-
         onSubmit: (values, action) => {
-            // alert(JSON.stringify(values, null, 2));
-            insertdata(values)
-            loaddata()
+            action.resetForm()
+            if(update){
+                Dataupdate(values)
+            }else{
+                Datainsert(values)
+            }
+            
             handleClose()
+            loaddata()
         },
     });
+    const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formik;
 
-    const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikobj;
-    const columns = [
-        { field: 'name', headerName: 'Name', width: 170 },
-        { field: 'age', headerName: 'Age', width: 170 },
-        { field: 'date', headerName: 'Date', width: 170 },
-        { field: 'address', headerName: 'Address', width: 170 },
+    const Datainsert = (values) => {
+        const databack = JSON.parse(localStorage.getItem("patient"))
 
-    ];
+        let id = Math.floor(Math.random() * 1000);
 
-    const loaddata = () => {
-        const datain = JSON.parse(localStorage.getItem("patient"))
-        if (datain !== null) {
-            setData(datain)
+        let iddata = {
+            id: id,
+            ...values
+        }
+
+        if (databack === null) {
+            localStorage.setItem("patient", JSON.stringify([iddata]));
+        } else {
+            databack.push(iddata);
+            localStorage.setItem("patient", JSON.stringify(databack))
         }
     }
+
+    const loaddata = () => {
+        const localdata = JSON.parse(localStorage.getItem("patient"));
+
+        if (localdata !== null) {
+            setData(localdata)
+        }
+    }
+
     useEffect(() => {
         loaddata()
-    }, []);
+    }, [])
+
+    const Deletefun = () => {
+        const localdata = JSON.parse(localStorage.getItem("patient"))
+
+      const Ddata =  localdata.filter((f) => f.id !== deletedata)
+
+        setData(Ddata)
+        localStorage.setItem("patient", JSON.stringify(Ddata))
+        handlealertClose()
+    }
+    const Edit =( params) => {
+        handleClickOpen()
+        setUpdate(true)
+        formik.setValues(params.row)
+    }
+    const Dataupdate = (values) => {
+        const localdata = JSON.parse(localStorage.getItem("patient"))
+
+       const updata = localdata.map((l) => {
+            if(l.id === values.id){
+                return values
+            }else{
+                return l;
+            }
+        })
+
+        localStorage.setItem("patient", JSON.stringify(updata));
+
+        loaddata();
+        setUpdate(false)
+    }
+    const columns = [
+        { field: 'name', headerName: 'Name', width: 170 },
+        { field: 'price', headerName: 'Price', width: 170 },
+        { field: 'quentity', headerName: 'Quentity', width: 170 },
+        { field: 'expiry', headerName: 'Expiry', width: 170 },
+        {
+            field: 'action',
+            headerName: 'Action',
+            width: 170,
+            renderCell: (params) => (
+                <>
+                <IconButton aria-label="edit" onClick={() =>Edit(params) }>
+                    <EditIcon />
+                </IconButton>
+                <IconButton aria-label="delete" onClick={() => {handleAlertOpen(); setdeletedata(params.id)}}>
+                    <DeleteIcon />
+                </IconButton>
+                </>
+                
+            )
+        }
+    ];
+
+
 
     return (
         <div>
-            <p>Patient</p>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Patient
-            </Button>
-            <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={data}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    checkboxSelection
-                />
+            <p>patient</p>
+
+            <div>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    Open form dialog
+                </Button>
+
+                <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                        rows={data}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                    />
+                </div>
+
+                <Dialog fullWidth open={open} onClose={handleClose}>
+                    <DialogTitle>Add medicine</DialogTitle>
+                    <Formik values={formik}>
+                        <Form onSubmit={handleSubmit}>
+                            <DialogContent>
+
+                                <TextField
+                                    margin="dense"
+                                    name="name"
+                                    label="name"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.name}
+                                />
+                                <p>{errors.name && touched.name ? errors.name : ''} </p>
+
+                                <TextField
+                                    margin="dense"
+                                    name="price"
+                                    label="Price"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.price}
+                                />
+                                <p>{errors.price && touched.price ? errors.price : ''} </p>
+
+
+                                <TextField
+                                    margin="dense"
+                                    name="quentity"
+                                    label="quentity"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.quentity}
+                                />
+                                <p>{errors.quentity && touched.quentity ? errors.quentity : ''} </p>
+
+
+                                <TextField
+                                    margin="dense"
+                                    name="expiry"
+                                    label="expiry date"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.expiry}
+                                />
+                                <p>{errors.expiry && touched.expiry ? errors.expiry : ''} </p>
+
+
+                                <DialogActions>
+                                    <Button type='submit'>Cancel</Button>
+                                    {
+                                        update ?
+                                        <Button type='submit'>Update</Button>
+                                        :
+                                        <Button type='submit'>Submit</Button>
+                                    }
+                                    
+                                </DialogActions>
+                            </DialogContent>
+                        </Form>
+                    </Formik>
+                </Dialog>
+
+
+                <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open alert dialog
+      </Button>
+      <Dialog
+        open={alertopen}
+        onClose={handlealertClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are You Sure"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handlealertClose}>No</Button>
+          <Button onClick={Deletefun} >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
             </div>
-            <Dialog fullWidth open={open} onClose={handleClose}>
-                <DialogTitle>Patient</DialogTitle>
-                <Formik values={formikobj}>
-                    <Form onSubmit={handleSubmit}>
-                        <DialogContent>
-                            <TextField
-                                margin="dense"
-                                name="name"
-                                label="Patient Name"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.name}
-                            />
-                            <p>{errors.name && touched.name ? errors.name : ''}</p>
-                            <TextField
-                                margin="dense"
-                                name="age"
-                                label="Patient Age"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.age}
-                            />
-                            <p>{errors.age && touched.age ? errors.age : ''}</p>
-                            <TextField
-                                margin="dense"
-                                name="date"
-                                label="Appointment Date"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.date}
-                            />
-                            <p>{errors.date && touched.date ? errors.date : ''}</p>
-                            <TextField
-                                margin="dense"
-                                name="address"
-                                label="Address"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.address}
-                            />
-                            <p>{errors.address && touched.address ? errors.address : ''}</p>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button type='submit'>Submit</Button>
-                            </DialogActions>
-                        </DialogContent>
-                    </Form>
-                </Formik>
-            </Dialog>
-        </div>
+        </div >
     );
 }
 
