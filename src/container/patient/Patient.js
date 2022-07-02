@@ -58,7 +58,7 @@ function Patient(props) {
         onSubmit: (values, action) => {
             // alert(JSON.stringify(values, null, 2));
             insertdata(values)
-            localdata()
+            loaddata()
             handleClose()
         },
     });
@@ -72,14 +72,14 @@ function Patient(props) {
 
     ];
 
-    const localdata = () => {
+    const loaddata = () => {
         const datain = JSON.parse(localStorage.getItem("patient"))
         if (datain !== null) {
             setData(datain)
         }
     }
     useEffect(() => {
-        localdata()
+        loaddata()
     }, []);
 
     return (
