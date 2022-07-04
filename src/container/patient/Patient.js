@@ -19,7 +19,7 @@ function Patient(props) {
     const [open, setOpen] = React.useState(false);
     const [data, setData] = useState([]);
     const [alertopen, setAlertOpen] = React.useState(false);
-    const [deletedata, setdeletedata] =useState([]);
+    const [deletedata, setdeletedata] = useState([]);
     const [update, setUpdate] = useState(false)
 
     const handleClickOpen = () => {
@@ -28,39 +28,41 @@ function Patient(props) {
 
     const handleClose = () => {
         setOpen(false);
+        formik.resetForm()
+        setUpdate(false)
     };
-   
-  const handleAlertOpen = () => {
-    setAlertOpen(true);
-  };
 
-  const handlealertClose = () => {
-    setAlertOpen(false);
-  };
+    const handleAlertOpen = () => {
+        setAlertOpen(true);
+    };
+
+    const handlealertClose = () => {
+        setAlertOpen(false);
+    };
 
     let schema = yup.object().shape({
         name: yup.string().required("required"),
-        price: yup.number().required("required").positive().integer(),
-        quentity: yup.number().required("required"),
-        expiry: yup.number().required("required")
+        age: yup.number().required("required").positive().integer(),
+        dateofbirth: yup.number().required("required"),
+        address: yup.number().required("required")
     });
 
     const formik = useFormik({
         initialValues: {
             name: '',
-            price: '',
-            quentity: '',
+            age: '',
+            dateofbirth: '',
             expiry: ''
         },
         validationSchema: schema,
         onSubmit: (values, action) => {
             action.resetForm()
-            if(update){
+            if (update) {
                 Dataupdate(values)
-            }else{
+            } else {
                 Datainsert(values)
             }
-            
+
             handleClose()
             loaddata()
         },
@@ -100,13 +102,13 @@ function Patient(props) {
     const Deletefun = () => {
         const localdata = JSON.parse(localStorage.getItem("patient"))
 
-      const Ddata =  localdata.filter((f) => f.id !== deletedata)
+        const Ddata = localdata.filter((f) => f.id !== deletedata)
 
         setData(Ddata)
         localStorage.setItem("patient", JSON.stringify(Ddata))
         handlealertClose()
     }
-    const Edit =( params) => {
+    const Edit = (params) => {
         handleClickOpen()
         setUpdate(true)
         formik.setValues(params.row)
@@ -114,10 +116,10 @@ function Patient(props) {
     const Dataupdate = (values) => {
         const localdata = JSON.parse(localStorage.getItem("patient"))
 
-       const updata = localdata.map((l) => {
-            if(l.id === values.id){
+        const updata = localdata.map((l) => {
+            if (l.id === values.id) {
                 return values
-            }else{
+            } else {
                 return l;
             }
         })
@@ -125,32 +127,31 @@ function Patient(props) {
         localStorage.setItem("patient", JSON.stringify(updata));
 
         loaddata();
+        handleClose()
         setUpdate(false)
     }
     const columns = [
         { field: 'name', headerName: 'Name', width: 170 },
-        { field: 'price', headerName: 'Price', width: 170 },
-        { field: 'quentity', headerName: 'Quentity', width: 170 },
-        { field: 'expiry', headerName: 'Expiry', width: 170 },
+        { field: 'age', headerName: 'Age', width: 170 },
+        { field: 'dateofbirth', headerName: 'Date of birth', width: 170 },
+        { field: 'address', headerName: 'Address', width: 170 },
         {
             field: 'action',
             headerName: 'Action',
             width: 170,
             renderCell: (params) => (
                 <>
-                <IconButton aria-label="edit" onClick={() =>Edit(params) }>
-                    <EditIcon />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => {handleAlertOpen(); setdeletedata(params.id)}}>
-                    <DeleteIcon />
-                </IconButton>
+                    <IconButton aria-label="edit" onClick={() => Edit(params)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete" onClick={() => { handleAlertOpen(); setdeletedata(params.id) }}>
+                        <DeleteIcon />
+                    </IconButton>
                 </>
-                
+
             )
         }
     ];
-
-
 
     return (
         <div>
@@ -158,7 +159,7 @@ function Patient(props) {
 
             <div>
                 <Button variant="outlined" onClick={handleClickOpen}>
-                    Open form dialog
+                    patient details
                 </Button>
 
                 <div style={{ height: 400, width: '100%' }}>
@@ -172,7 +173,7 @@ function Patient(props) {
                 </div>
 
                 <Dialog fullWidth open={open} onClose={handleClose}>
-                    <DialogTitle>Add medicine</DialogTitle>
+                    <DialogTitle>Add Patient Details</DialogTitle>
                     <Formik values={formik}>
                         <Form onSubmit={handleSubmit}>
                             <DialogContent>
@@ -192,83 +193,80 @@ function Patient(props) {
 
                                 <TextField
                                     margin="dense"
-                                    name="price"
-                                    label="Price"
+                                    name="age"
+                                    label="Age"
                                     type="text"
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.price}
+                                    value={values.age}
                                 />
-                                <p>{errors.price && touched.price ? errors.price : ''} </p>
+                                <p>{errors.age && touched.age ? errors.age : ''} </p>
 
 
                                 <TextField
                                     margin="dense"
-                                    name="quentity"
-                                    label="quentity"
+                                    name="dateofbirth"
+                                    label="Date of Birth"
                                     type="text"
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.quentity}
+                                    value={values.dateofbirth}
                                 />
-                                <p>{errors.quentity && touched.quentity ? errors.quentity : ''} </p>
+                                <p>{errors.dateofbirth && touched.dateofbirth ? errors.dateofbirth : ''} </p>
 
 
                                 <TextField
                                     margin="dense"
-                                    name="expiry"
-                                    label="expiry date"
+                                    name="address"
+                                    label="Address"
                                     type="text"
                                     fullWidth
                                     variant="standard"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.expiry}
+                                    value={values.address}
                                 />
-                                <p>{errors.expiry && touched.expiry ? errors.expiry : ''} </p>
+                                <p>{errors.address && touched.address ? errors.address : ''} </p>
 
 
                                 <DialogActions>
                                     <Button type='submit'>Cancel</Button>
                                     {
                                         update ?
-                                        <Button type='submit'>Update</Button>
-                                        :
-                                        <Button type='submit'>Submit</Button>
+                                            <Button type='submit'>Update</Button>
+                                            :
+                                            <Button type='submit'>Submit</Button>
                                     }
-                                    
+
                                 </DialogActions>
                             </DialogContent>
                         </Form>
                     </Formik>
                 </Dialog>
 
-
                 <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button>
-      <Dialog
-        open={alertopen}
-        onClose={handlealertClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Are You Sure"}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handlealertClose}>No</Button>
-          <Button onClick={Deletefun} >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+
+                    <Dialog
+                        open={alertopen}
+                        onClose={handlealertClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Are You Sure"}
+                        </DialogTitle>
+                        <DialogActions>
+                            <Button onClick={handlealertClose}>No</Button>
+                            <Button onClick={Deletefun} >
+                                Yes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
             </div>
         </div >
     );

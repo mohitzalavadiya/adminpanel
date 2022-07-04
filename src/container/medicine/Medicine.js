@@ -35,6 +35,7 @@ function Medicine(props) {
     const handleClose = () => {
         setOpen(false);
         formikobj.resetForm()
+        setUpdate(false)
     };
 
 // function for localStorage item
