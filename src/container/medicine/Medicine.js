@@ -26,18 +26,19 @@ function Medicine(props) {
     const [alert, setAlert] = useState(false);
     const [alertdata, setAlertdata] = useState(null);
     const [update, setUpdate] = useState(false)
+    const [searchdata, setSearchdata] = useState([])
 
-        // function for dialog open
+    // function for dialog open
     const handleClickOpen = () => {
         setOpen(true);
     };
-        // function for dialog close
+    // function for dialog close
     const handleClose = () => {
         setOpen(false);
         formikobj.resetForm()
     };
 
-// function for localStorage item
+    // function for localStorage item
     const Datainti = (values) => {
         const databack = JSON.parse(localStorage.getItem('medicine'));
 
@@ -79,10 +80,10 @@ function Medicine(props) {
     const updatedata = (values) => {
         const upddata = JSON.parse(localStorage.getItem("medicine"))
 
-       const newdata = upddata.map((m) => {
-            if(m.id === values.id){
+        const newdata = upddata.map((m) => {
+            if (m.id === values.id) {
                 return values;
-            }else{
+            } else {
                 return m;
             }
         })
@@ -102,11 +103,11 @@ function Medicine(props) {
         },
         validationSchema: schema,
         onSubmit: (values, action) => {
-            if(update){
+            if (update) {
                 updatedata(values)
-            }else{
+            } else {
                 Datainti(values);
-            } 
+            }
             handleClose()
             localdata()
         },
@@ -137,9 +138,9 @@ function Medicine(props) {
 
     // function for update
     const editopen = (params) => {
-       setOpen(true)
+        setOpen(true)
 
-       setUpdate(true)
+        setUpdate(true)
         formikobj.setValues(params.row)
     }
 
@@ -155,21 +156,33 @@ function Medicine(props) {
             width: 170,
             renderCell: (params) => (
                 <>
-                <IconButton aria-label="edit" onClick={() => editopen(params)}>
-                    <EditIcon />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => {alertopen(); setAlertdata(params.id)}}>
-                    <DeleteIcon />
-                </IconButton>
+                    <IconButton aria-label="edit" onClick={() => editopen(params)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton aria-label="delete" onClick={() => { alertopen(); setAlertdata(params.id) }}>
+                        <DeleteIcon />
+                    </IconButton>
                 </>
-                
+
             )
         }
     ];
 
 
     const { handleBlur, handleChange, handleSubmit, errors, touched, values } = formikobj;
+   
+    const Searchdata =(val) => {
+      const  localdata = JSON.parse(localStorage.getItem("medicine"));
 
+      const finaldata =  localdata.filter((l) => (
+            l.name.toLowerCase().includes(val.toLowerCase()) ||
+            l.price.toString().toLowerCase().includes(val.toLowerCase()) ||
+            l.quantity.toString().toLowerCase().includes(val.toLowerCase()) ||
+            l.expiry.toString().toLowerCase().includes(val.toLowerCase())
+        ))
+        setSearchdata(finaldata)
+    }
+const finalsearchdata = searchdata.length > 0 ? searchdata : data;
     return (
         <div>
             <p>Medicine</p>
@@ -178,9 +191,18 @@ function Medicine(props) {
                 <Button variant="outlined" onClick={handleClickOpen}>
                     Add Medicine
                 </Button>
+                <TextField
+                    margin="dense"
+                    name="name"
+                    label="Search"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    onChange={(e) => Searchdata(e.target.value)}
+                />
                 <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
-                        rows={data}
+                        rows={finalsearchdata}
                         columns={columns}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
@@ -246,10 +268,10 @@ function Medicine(props) {
                                 <DialogActions>
                                     <Button onClick={handleClose}>Cancel</Button>
                                     {
-                                        update ? 
-                                    <Button type='submit' >Update</Button>
-                                    :
-                                    <Button type='submit' >submit</Button>
+                                        update ?
+                                            <Button type='submit' >Update</Button>
+                                            :
+                                            <Button type='submit' >submit</Button>
                                     }
                                 </DialogActions>
                             </DialogContent>
