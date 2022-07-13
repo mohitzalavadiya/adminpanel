@@ -176,9 +176,9 @@ function Medicine(props) {
 
       const finaldata =  localdata.filter((l) => (
             l.name.toLowerCase().includes(val.toLowerCase()) ||
-            l.price.toString().toLowerCase().includes(val.toLowerCase()) ||
-            l.quantity.toString().toLowerCase().includes(val.toLowerCase()) ||
-            l.expiry.toString().toLowerCase().includes(val.toLowerCase())
+            l.price.toString().includes(val) ||
+            l.quantity.toString().includes(val) ||
+            l.expiry.toString().includes(val)
         ))
         setSearchdata(finaldata)
     }
