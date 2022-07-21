@@ -21,6 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import PersonIcon from '@mui/icons-material/Person';
 import { NavLink } from 'react-router-dom';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 const drawerWidth = 240;
 
@@ -103,7 +104,8 @@ export default function Layout({ children }) {
 
   const dataT = [
     {label : 'Medicine', to:'/medicine', icon:<MedicalServicesIcon/> },
-    {label : 'Patient', to:'/patient', icon:<PersonIcon/> }
+    {label : 'Patient', to:'/patient', icon:<PersonIcon/> },
+    {label : 'Counter', to:'/counter', icon:<HourglassEmptyIcon/> }
   ]
 
   return (
