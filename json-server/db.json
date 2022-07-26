@@ -1,13 +1,36 @@
 {
   "posts": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "id":"1",
+      "name":"ABC",
+      "price":"343",
+      "expriy":"2024"
     },
     {
-      "id": 2
+      "id":"2",
+      "name":"MNP",
+      "price":"343",
+      "expriy":"2024"
+    },
+    {
+      "id":"3",
+      "name":"ABC",
+      "price":"343",
+      "expriy":"2024"
+    },
+    {
+      "id":"4",
+      "name":"ABC",
+      "price":"343",
+      "expriy":"2024"
+    },
+    {
+      "id":"5",
+      "name":"ABC",
+      "price":"343",
+      "expriy":"2024"
     }
+
   ],
   "comments": [
     {

@@ -13,6 +13,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Slide from '@mui/material/Slide';
 import EditIcon from '@mui/icons-material/Edit';
+import {useDispatch} from "react-redux"
+import { datamedicine } from '../../redux/action/action.medicine';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -64,9 +66,12 @@ function Medicine(props) {
             setData(datap);
         }
     }
+
+    const dispatch = useDispatch()
     // useEffect
     useEffect(() => {
-        localdata()
+        // localdata()
+        dispatch(datamedicine())
     }, []);
 
     // yup schema
