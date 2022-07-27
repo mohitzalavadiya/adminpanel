@@ -1,0 +1,42 @@
+{
+    "posts": [
+      { "id": 1,
+      "name": "ABC",
+      "price": "34",
+      "quantity": "345",
+      "expiry": 3030}
+    ,
+    
+        { "id": 2,
+        "name": "DDF",
+        "price": "34",
+        "quantity": "345",
+        "expiry": 3030}
+      ,
+      
+        { "id": 3,
+        "name": "EGD",
+        "price": "34",
+        "quantity": "345",
+        "expiry": 3030}
+      ,
+      
+        { "id": 4,
+        "name": "HRV",
+        "price": "34",
+        "quantity": "345",
+        "expiry": 3030}
+      ,
+      
+        { "id": 5,
+        "name": "UEN",
+        "price": "34",
+        "quantity": "345",
+        "expiry": 3030}
+    ],
+
+    "comments": [
+      { "id": 1, "body": "some comment", "postId": 1 }
+    ],
+    "profile": { "name": "typicode" }
+  }

@@ -1,2 +1,3 @@
 export const INCREMENT = 'INCREMENT' 
 export const DECREMENT = 'DECREMENT'
+export const DATA_MEDICINE = 'DATA_MEDICINE'
