@@ -3,7 +3,7 @@ import * as ActionTypes from "../reducer/Actiontype"
 const initVal = {
     isLoading: false,
     medicine: [],
-    error: []
+    error: ""
 }
 
 export const medicineReducer = (state = initVal, action) => {
@@ -13,10 +13,24 @@ export const medicineReducer = (state = initVal, action) => {
                 ...state,
                 isLoading: false,
                 medicine: action.payload,
-                error: []
+                error:''
             }
             break;
-        default :
-        return state;    
+        case ActionTypes.LOADING_MEDICINE:
+            return {
+                ...state,
+                isLoading: true,
+                error: ""
+            }
+            break
+        case ActionTypes.ERROR_MEDICINE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload
+            }
+            break
+        default:
+            return state;
     }
 }
