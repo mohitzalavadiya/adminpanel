@@ -1,53 +1,52 @@
 {
-    "posts": [
-      {
-        "id":"1",
-        "name":"ABC",
-        "price":"343",
-        "quantity":"345",
-        "expiry":"2024"
-      },
-      {
-        "id":"2",
-        "name":"MNP",
-        "price":"343",
-        "quantity":"345",
-        "expiry":"2024"
-      },
-      {
-        "id":"3",
-        "name":"ABC",
-        "price":"343",
-        "quantity":"345",
-        "expiry":"2024"
-      },
-      {
-        "id":"4",
-        "name":"ABC",
-        "price":"343",
-        "quantity":"345",
-        "expiry":"2024"
-      },
-      {
-        "id":"5",
-        "name":"ABC",
-        "price":"343",
-        "quantity":"345",
-        "expiry":"2024"
-      }
-  
-    ],
-    "comments": [
-      {
-        "id": 1,
-        "body": "some comment",
-        "postId": 1
-      },
-      {
-        "id": 23
-      }
-    ],
-    "profile": {
-      "name": "typicode"
+  "posts": [
+    {
+      "id": "1",
+      "name": "ABC",
+      "price": "343",
+      "quantity": "345",
+      "expiry": "2024"
+    },
+    {
+      "id": "2",
+      "name": "MNP",
+      "price": "343",
+      "quantity": "345",
+      "expiry": "2024"
+    },
+    {
+      "id": "3",
+      "name": "ABC",
+      "price": "343",
+      "quantity": "345",
+      "expiry": "2024"
+    },
+    {
+      "id": 929,
+      "name": "WWW",
+      "price": "23",
+      "quantity": "2",
+      "expiry": "2"
+    },
+    {
+      "id": 895,
+      "name": "ddd",
+      "price": "2",
+      "quantity": "3",
+      "expiry": "2"
     }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    },
+    {
+      "id": 23
+    }
+  ],
+  "profile": {
+    "name": "typicode"
   }
+}
