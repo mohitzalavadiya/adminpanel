@@ -14,7 +14,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Slide from "@mui/material/Slide";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
-import { addmedicine, datamedicine } from "../../redux/action/action.medicine";
+import {
+  addmedicine,
+  datamedicine,
+  deletemedicine,
+  updatemedicine,
+} from "../../redux/action/action.medicine";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -82,17 +87,18 @@ function Medicine(props) {
   });
 
   const updatedata = (values) => {
-    const upddata = JSON.parse(localStorage.getItem("medicine"));
+    // const upddata = JSON.parse(localStorage.getItem("medicine"));
 
-    const newdata = upddata.map((m) => {
-      if (m.id === values.id) {
-        return values;
-      } else {
-        return m;
-      }
-    });
-    localStorage.setItem("medicine", JSON.stringify(newdata));
+    // const newdata = upddata.map((m) => {
+    //   if (m.id === values.id) {
+    //     return values;
+    //   } else {
+    //     return m;
+    //   }
+    // });
+    // localStorage.setItem("medicine", JSON.stringify(newdata));
 
+    dispatch(updatemedicine(values));
     handleClose();
     localdata();
     setUpdate(false);
@@ -119,13 +125,15 @@ function Medicine(props) {
 
   // function for deletedata
   const detelefun = () => {
-    const localdatadelete = JSON.parse(localStorage.getItem("medicine"));
+    // const localdatadelete = JSON.parse(localStorage.getItem("medicine"));
 
-    const deletedata = localdatadelete.filter((p) => p.id !== alertdata);
+    // const deletedata = localdatadelete.filter((p) => p.id !== alertdata);
 
-    setData(deletedata);
+    // setData(deletedata);
 
-    localStorage.setItem("medicine", JSON.stringify(deletedata));
+    // localStorage.setItem("medicine", JSON.stringify(deletedata));
+    dispatch(deletemedicine(alertdata));
+    handleClose();
     setAlert(false);
   };
 
