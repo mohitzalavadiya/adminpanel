@@ -14,12 +14,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Slide from "@mui/material/Slide";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addmedicine,
-  datamedicine,
-  deletemedicine,
-  updatemedicine,
-} from "../../redux/action/action.medicine";
+// import {
+//   addmedicine,
+//   datamedicine,
+//   deletemedicine,
+//   updatemedicine,
+// } from "../../redux/action/action.medicine";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -53,7 +53,7 @@ function Medicine(props) {
       id: id,
       ...values,
     };
-    dispatch(addmedicine(datain));
+    // dispatch(addmedicine(datain));
     // if (databack === null) {
     //     localStorage.setItem('medicine', JSON.stringify([datain]))
     // } else {
@@ -75,7 +75,7 @@ function Medicine(props) {
   // useEffect
   useEffect(() => {
     // localdata()
-    dispatch(datamedicine());
+    // dispatch(datamedicine());
   }, []);
 
   // yup schema
@@ -98,7 +98,7 @@ function Medicine(props) {
     // });
     // localStorage.setItem("medicine", JSON.stringify(newdata));
 
-    dispatch(updatemedicine(values));
+    // dispatch(updatemedicine(values));
     handleClose();
     localdata();
     setUpdate(false);
@@ -132,7 +132,7 @@ function Medicine(props) {
     // setData(deletedata);
 
     // localStorage.setItem("medicine", JSON.stringify(deletedata));
-    dispatch(deletemedicine(alertdata));
+    // dispatch(deletemedicine(alertdata));
     handleClose();
     setAlert(false);
   };
