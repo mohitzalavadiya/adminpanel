@@ -38,12 +38,39 @@
   ],
   "comments": [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id": "1",
+      "name": "ABC",
+      "age": "343",
+      "dateofbirth": "345",
+      "address": "2024"
     },
     {
-      "id": 23
+      "id": "2",
+      "name": "ABC",
+      "age": "343",
+      "dateofbirth": "345",
+      "address": "2024"
+    },
+    {
+      "id": "3",
+      "name": "ABC",
+      "age": "343",
+      "dateofbirth": "345",
+      "address": "2024"
+    },
+    {
+      "id": 929,
+      "name": "ABC",
+      "age": "343",
+      "dateofbirth": "345",
+      "address": "2024"
+    },
+    {
+      "id": 895,
+      "name": "ABC",
+      "age": "343",
+      "dateofbirth": "345",
+      "address": "2024"
     }
   ],
   "profile": {
