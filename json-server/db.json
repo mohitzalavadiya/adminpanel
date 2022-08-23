@@ -1,26 +1,21 @@
 {
   "posts": [
     {
-      "id": "1",
-      "name": "ABCEE",
-      "price": "343",
-      "quantity": "345",
-      "expiry": "2024"
-    },
-    {
       "id": "2",
       "name": "MNPDDDFDD",
       "price": "343",
       "quantity": "345",
       "expiry": "2024"
+    },
+    {
+      "id": 748,
+      "name": "hh",
+      "price": "98",
+      "quantity": "900",
+      "expiry": "099"
     }
   ],
   "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    },
     {
       "id": 23
     }
